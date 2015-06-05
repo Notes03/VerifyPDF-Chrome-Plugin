@@ -2,24 +2,24 @@
 	"name": "__MSG_application_title__",
 	"description": "__MSG_application_description__",
 	"version": "1.0",
-	"homepage_url": "http://verifypdf.com",  
+	"homepage_url": "https://verifypdf.com",  
 	"default_locale": "en",
 	"background": {
 		"pages": ["background.html"],
 		"scripts": ["jquery/jquery.min.js", "background.js"]
 	},
-	"icons": { 
+	"icons": {
 		"16": "images/16x16_gruen.png",
         "48": "images/48x48.png",
-        "128": "images/128x128.png" 
+        "128": "images/128x128.png"
 	},
 	"browser_action": {
 		"default_name": "VerifyPDF",
 		"default_popup" : "background.html"
 	},
 	"web_accessible_resources": [
-		"images/16x16_gruen.png", 
-		"images/16x16_rot.png", 
+		"images/16x16_gruen.png",
+		"images/16x16_rot.png",
 		"images/16x16_orange.png",
 		"images/16x16_grau.png"
 	],
