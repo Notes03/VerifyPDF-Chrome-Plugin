@@ -1,0 +1,10 @@
+{
+  "application_title": {
+    "message": "VerifyPDF",
+    "description": "Check your PDF files to malicious code."
+  },
+  "application_description": {
+    "message": "VerifyPDF",
+    "description": "VerifyPDF checks your PDF files to JavaScript and other stuff."
+  }
+}
