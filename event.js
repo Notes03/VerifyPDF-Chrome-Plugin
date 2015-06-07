@@ -15,6 +15,12 @@ String.prototype.hashCode = function() {
   return hash;
 };
 
+if (typeof String.prototype.endsWith != 'function') {
+  String.prototype.endsWith = function (str){
+    return this.slice(-str.length) == str;
+  };
+}
+
 function determineContent(){
 	var countPDF;
 	//setTimeout(function() {
@@ -22,36 +28,75 @@ function determineContent(){
 
 		$('a[href*=".pdf"]').each(function() {
 			var url = $(this).attr("href");
-			// ingore google stuff
-			if (/translate.google/i.test(url) || /webcache.googleusercontent/i.test(url) || url.toLowerCase().startsWith("/search?")) {
-			} else {
-				countPDF++;
-				var opt = countPDF;
-				var str = "pdf" + countPDF;
-				var hash = str.hashCode();
-				console.log(hash);
-				if ($("#"+hash).length <= 0){
-					$(this).after("  <img id='"+ hash +"' class='verifyPDF' title='Klicken Sie hier um die PDF mit VerifyPDF zu prüfen.' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
-				}
-				var thiz = $(this);
-				document.getElementById(hash).addEventListener("click",
-					function(e) {
-						alert($(thiz).attr("href"));
-					}
-				);
-
-				/*
-				var x = Math.floor((Math.random() * 10) + 1);
-
-				if(x <= 3) {
-					$(this).after("  <img title='Diese PDF ist sicher - Geprüft von VerifyPDF' src='" + chrome.extension.getURL('images/16x16_gruen.png') + " '>");
-				} else if(x <= 6) {
-					$(this).after("  <img title='Diese PDF kann gefährlich sein - Geprüft von VerifyPDF' src='" + chrome.extension.getURL('images/16x16_orange.png') + " '>");
-				} else if(x <= 8) {
-					$(this).after("  <img title='Diese PDF ist gefährlich - Geprüft von VerifyPDF' src='" + chrome.extension.getURL('images/16x16_rot.png') + " '>");
+			var pdf = $(this).attr("href").split('.').pop().toLowerCase();
+			if(pdf.startsWith("pdf")) {
+				// ingore google stuff
+				if (/translate.google/i.test(url) || /webcache.googleusercontent/i.test(url) || url.toLowerCase().startsWith("/search?")) {
 				} else {
-					$(this).after("  <img title='Prüfung von VerifyPDF steht aus. Bitte kurz warten oder PDF auf unserer Webseite manuell prüfen.' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
-				}	*/
+					countPDF++;
+					var opt = countPDF;
+					var str = "pdf" + countPDF;
+					var hash = str.hashCode();
+					console.log(hash);
+					if ($("#"+hash).length <= 0){
+						$(this).after("  <img class='check' id='"+ hash +"' class='verifyPDF' title='Klicken Sie hier um die PDF mit VerifyPDF zu prüfen.' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
+					}
+					var thiz = $(this);
+					document.getElementById(hash).addEventListener("click",
+						function(e) {
+							//var url = $(thiz).attr("href");
+							
+							var loading = "<img title='Bitte warten Sie einen Augenblick, bis die PDF-Datei geprüft wurde.' id='"+ hash +"' src='" + chrome.extension.getURL('images/loading.gif') + " '>";
+							$.ajax({
+								type: "GET",
+								crossDomain: true,
+								async: true,
+								dataType: 'json',
+								timeout: 40000,
+								url: "https://www.verifyPDF.com/api.xhtml?url="+url,
+								beforeSend: function() {
+									$( "#" + hash).replaceWith( loading );
+								}
+							}).done(function(data){
+								var classifier = data["classifier"];
+								var error = data["error"];
+
+								if(error == "filenotfound") {
+									$("#" + hash).replaceWith( "  <img id='"+ hash +"' class='verifyPDF' title='Diese URL kann zur Zeit nicht geprüft werden. Bitte verwenden Sie zum Prüfen unsere Webseite. (Fehler: 1e)' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
+								} else {
+									switch (classifier) {
+										case "NO_RISK": 
+										case "LOW_RISK":
+											$("#" + hash).replaceWith( "<img class='success' id='pdf"+ hash +"' title='Diese PDF ist sicher. Sie können die PDF-Datei ohne Bedenken öffnen - Geprüft von VerifyPDF' src='" + chrome.extension.getURL('images/16x16_gruen.png') + " '>" );
+											break;
+										case "MIDDLE_RISK": 
+											$("#" + hash).replaceWith( "  <img class='success' id='pdf"+ hash +"' title='Diese PDF kann gefährlich sein - Geprüft von VerifyPDF' src='" + chrome.extension.getURL('images/16x16_orange.png') + " '>");
+											break;
+										case "HIGH_RISK": 
+										case "FATAL_RISK":
+											$("#" + hash).replaceWith( "  <img class='success' id='pdf"+ hash +"' title='Diese PDF ist gefährlich. Bitte nicht öffnen - Geprüft von VerifyPDF' src='" + chrome.extension.getURL('images/16x16_rot.png') + " '>");
+											break;
+										default: 
+											$("#" + hash).replaceWith( "  <img class='success' id='pdf"+ hash +"' class='verifyPDF' title='Leider gab es einen Fehler. Sie können die Datei auch herunterladen und über unsere Webseite prüfen. (Fehler: 1d)' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
+									}
+									
+									document.getElementById("pdf"+hash).addEventListener("click",
+										function(e) {
+											var tabUrl = "https://www.verifyPDF.com/?url="+url;
+											window.open(tabUrl,'_blank');
+										}	
+									);	
+								}	
+							}).fail(function(jqXHR, status) {
+								if(status === "timeout") {
+									$("#" + hash).replaceWith( "  <img id='"+ hash +"' class='verifyPDF' title='Diese URL kann zur Zeit nicht geprüft werden. Bitte verwenden Sie zum Prüfen unsere Webseite. (Fehler: 1f)' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
+								} else {	
+									$("#" + hash).replaceWith( "  <img id='"+ hash +"' class='verifyPDF' title='Leider gab es einen Fehler. Sie können die Datei auch herunterladen und über unsere Webseite prüfen. (Fehler: 2f)' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
+								}
+							});
+						}	
+					);
+				}
 			}
 		});
 		chrome.extension.sendMessage({action:countPDF}, function(){});

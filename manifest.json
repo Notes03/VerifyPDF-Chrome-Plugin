@@ -21,10 +21,12 @@
 		"images/16x16_gruen.png",
 		"images/16x16_rot.png",
 		"images/16x16_orange.png",
-		"images/16x16_grau.png"
+		"images/16x16_grau.png",
+		"images/loading.gif"
 	],
 	"content_scripts": [ {
 		"js": [ "jquery/jquery.min.js", "event.js" ],
+		"css" : ["css/style.css"],
 		"matches": [ "http://*/*", "https://*/*"]
 	}],
 	"permissions": [
