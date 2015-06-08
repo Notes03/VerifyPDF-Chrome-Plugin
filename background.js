@@ -17,19 +17,16 @@ function detectPdf(){
 
 chrome.tabs.onUpdated.addListener(function(tabId, props) {
   if (props.status == "complete" && tabId == selectedId) {
-    console.log("onUpdated");
 	detectPdf();
   }
 });
 
 chrome.tabs.onSelectionChanged.addListener(function(tabId, props) {
   selectedId = tabId;
-  console.log("onSelectionChanged");
   //detectPdf();
 });
 
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
   selectedId = tabs[0].id;
-  console.log("query");
   detectPdf();
 });

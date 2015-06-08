@@ -29,15 +29,17 @@ function determineContent(){
 		$('a[href*=".pdf"]').each(function() {
 			var url = $(this).attr("href");
 			var pdf = $(this).attr("href").split('.').pop().toLowerCase();
+			
 			if(pdf.startsWith("pdf")) {
 				// ingore google stuff
 				if (/translate.google/i.test(url) || /webcache.googleusercontent/i.test(url) || url.toLowerCase().startsWith("/search?")) {
-				} else {
+				} else {		
 					countPDF++;
 					var opt = countPDF;
 					var str = "pdf" + countPDF;
 					var hash = str.hashCode();
-					console.log(hash);
+					var urlTextLength = $(this).text().length;
+
 					if ($("#"+hash).length <= 0){
 						$(this).after("  <img class='check' id='"+ hash +"' class='verifyPDF' title='Klicken Sie hier um die PDF mit VerifyPDF zu prüfen.' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
 					}
@@ -96,6 +98,10 @@ function determineContent(){
 							});
 						}	
 					);
+					// if the 
+					if(urlTextLength >= 60) {
+						$("#" + hash).before("<br />");
+					}
 				}
 			}
 		});
