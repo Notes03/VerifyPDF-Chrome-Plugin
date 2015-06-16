@@ -4,7 +4,7 @@
     "description": "Check your PDF files to malicious code."
   },
   "application_description": {
-    "message": "VerifyPDF",
+    "message": "VerifyPDF checks your PDF files to JavaScript and other stuff.",
     "description": "VerifyPDF checks your PDF files to JavaScript and other stuff."
   }
 }
