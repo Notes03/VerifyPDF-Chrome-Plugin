@@ -3,7 +3,7 @@
 	"description": "__MSG_application_description__",
 	"version": "1.0",
 	"homepage_url": "https://verifypdf.com",  
-	"default_locale": "en",
+	"default_locale": "de",
 	"author": "Manuel Scholz",
 	"background": {
 		"pages": ["background.html"],
