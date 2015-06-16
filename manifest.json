@@ -4,6 +4,7 @@
 	"version": "1.0",
 	"homepage_url": "https://verifypdf.com",  
 	"default_locale": "en",
+	"author": "Manuel Scholz",
 	"background": {
 		"pages": ["background.html"],
 		"scripts": ["jquery/jquery.min.js", "background.js"]
@@ -18,10 +19,10 @@
 		"default_popup" : "background.html"
 	},
 	"web_accessible_resources": [
-		"images/16x16_gruen.png",
-		"images/16x16_rot.png",
+		"images/16x16_green.png",
+		"images/16x16_red.png",
 		"images/16x16_orange.png",
-		"images/16x16_grau.png",
+		"images/16x16_grey.png",
 		"images/loading.gif"
 	],
 	"content_scripts": [ {

@@ -41,7 +41,7 @@ function determineContent(){
 					var urlTextLength = $(this).text().length;
 
 					if ($("#"+hash).length <= 0){
-						$(this).after("  <img class='check' id='"+ hash +"' class='verifyPDF' title='Klicken Sie hier um die PDF mit VerifyPDF zu prüfen.' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
+						$(this).after("  <img class='check' id='"+ hash +"' class='verifyPDF' title='Klicken Sie hier um die PDF mit VerifyPDF zu prüfen.' src='" + chrome.extension.getURL('images/16x16_grey.png') + " '>");
 					}
 					var thiz = $(this);
 					document.getElementById(hash).addEventListener("click",
@@ -64,22 +64,22 @@ function determineContent(){
 								var error = data["error"];
 
 								if(error == "filenotfound") {
-									$("#" + hash).replaceWith( "  <img id='"+ hash +"' class='verifyPDF' title='Diese URL kann zur Zeit nicht geprüft werden. Bitte verwenden Sie zum Prüfen unsere Webseite. (Fehler: 1e)' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
+									$("#" + hash).replaceWith( "  <img id='"+ hash +"' class='verifyPDF' title='Diese URL kann zur Zeit nicht geprüft werden. Bitte verwenden Sie zum Prüfen unsere Webseite. (Fehler: 1e)' src='" + chrome.extension.getURL('images/16x16_grey.png') + " '>");
 								} else {
 									switch (classifier) {
 										case "NO_RISK": 
 										case "LOW_RISK":
-											$("#" + hash).replaceWith( "<img class='success' id='pdf"+ hash +"' title='Diese PDF ist sicher. Sie können die PDF-Datei ohne Bedenken öffnen - Geprüft von VerifyPDF' src='" + chrome.extension.getURL('images/16x16_gruen.png') + " '>" );
+											$("#" + hash).replaceWith( "<img class='success' id='pdf"+ hash +"' title='Diese PDF ist sicher. Sie können die PDF-Datei ohne Bedenken öffnen - Geprüft von VerifyPDF' src='" + chrome.extension.getURL('images/16x16_green.png') + " '>" );
 											break;
 										case "MIDDLE_RISK": 
 											$("#" + hash).replaceWith( "  <img class='success' id='pdf"+ hash +"' title='Diese PDF kann gefährlich sein - Geprüft von VerifyPDF' src='" + chrome.extension.getURL('images/16x16_orange.png') + " '>");
 											break;
 										case "HIGH_RISK": 
 										case "FATAL_RISK":
-											$("#" + hash).replaceWith( "  <img class='success' id='pdf"+ hash +"' title='Diese PDF ist gefährlich. Bitte nicht öffnen - Geprüft von VerifyPDF' src='" + chrome.extension.getURL('images/16x16_rot.png') + " '>");
+											$("#" + hash).replaceWith( "  <img class='success' id='pdf"+ hash +"' title='Diese PDF ist gefährlich. Bitte nicht öffnen - Geprüft von VerifyPDF' src='" + chrome.extension.getURL('images/16x16_red.png') + " '>");
 											break;
 										default: 
-											$("#" + hash).replaceWith( "  <img class='success' id='pdf"+ hash +"' class='verifyPDF' title='Leider gab es einen Fehler. Sie können die Datei auch herunterladen und über unsere Webseite prüfen. (Fehler: 1d)' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
+											$("#" + hash).replaceWith( "  <img class='success' id='pdf"+ hash +"' class='verifyPDF' title='Leider gab es einen Fehler. Sie können die Datei auch herunterladen und über unsere Webseite prüfen. (Fehler: 1d)' src='" + chrome.extension.getURL('images/16x16_grey.png') + " '>");
 									}
 									
 									document.getElementById("pdf"+hash).addEventListener("click",
@@ -91,9 +91,9 @@ function determineContent(){
 								}	
 							}).fail(function(jqXHR, status) {
 								if(status === "timeout") {
-									$("#" + hash).replaceWith( "  <img id='"+ hash +"' class='verifyPDF' title='Diese URL kann zur Zeit nicht geprüft werden. Bitte verwenden Sie zum Prüfen unsere Webseite. (Fehler: 1f)' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
+									$("#" + hash).replaceWith( "  <img id='"+ hash +"' class='verifyPDF' title='Diese URL kann zur Zeit nicht geprüft werden. Bitte verwenden Sie zum Prüfen unsere Webseite. (Fehler: 1f)' src='" + chrome.extension.getURL('images/16x16_grey.png') + " '>");
 								} else {	
-									$("#" + hash).replaceWith( "  <img id='"+ hash +"' class='verifyPDF' title='Leider gab es einen Fehler. Sie können die Datei auch herunterladen und über unsere Webseite prüfen. (Fehler: 2f)' src='" + chrome.extension.getURL('images/16x16_grau.png') + " '>");
+									$("#" + hash).replaceWith( "  <img id='"+ hash +"' class='verifyPDF' title='Leider gab es einen Fehler. Sie können die Datei auch herunterladen und über unsere Webseite prüfen. (Fehler: 2f)' src='" + chrome.extension.getURL('images/16x16_grey.png') + " '>");
 								}
 							});
 						}	
